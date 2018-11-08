@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const adventureSchema = new mongoose.Schema({
+  priority: {
+    type: Number,
+    required: true
+  },
   title: {
     type: String,
     required: true
