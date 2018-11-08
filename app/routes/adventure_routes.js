@@ -33,10 +33,25 @@ const router = express.Router()
 router.get('/adventures', requireToken, (req, res) => {
   Adventure.find()
     .then(adventures => {
+      console.log(req.user.id)
+      // const newAdventures = []
+      const adventuresbyOwner = adventures.filter(adventure => {
+        // console.log(adventure.owner)
+        // console.log('whoa')
+        if (adventure.owner == req.user.id) {
+          // console.log('you are running the successfull double equals')
+          // adventuresbyOwner.push('you pushed something')
+          return true
+        }
+      })
+      console.log(adventuresbyOwner)
+      // console.log(adventures)
+      // adventures.filter(adventure => req.body.adventure.owner)
+      // requireOwnership(req, adventures)
       // `adventures` will be an array of Mongoose documents
       // we want to convert each one to a POJO, so we use `.map` to
       // apply `.toObject` to each one
-      return adventures.map(adventure => adventure.toObject())
+      return adventuresbyOwner.map(adventure => adventure.toObject())
     })
     // respond with status 200 and JSON of the adventures
     .then(adventures => res.status(200).json({ adventures: adventures }))
