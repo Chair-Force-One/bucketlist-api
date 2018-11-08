@@ -1,209 +1,160 @@
-Chair Force One.
+BucketLi.st
 
-Gerald Hills
-Charles Lewis
-Calder Kempana
-Joshua Kreimier
+![Chair Force One Logo](https://cdn.shopify.com/s/files/1/2237/2693/products/Air_force-5_1024x1024@2x.png?v=1524594398)
 
-# bucketlist-api
+## Description
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+Bucket List is designed to help users keep track of everything they plan on doing (eventually). This is an app that allows you to check off items that you’ve accomplished. A new feature is the “City” Function. This function allows you to plan trips and keep locations listed. You can also keep your bucket list organized by priority of what you want to do first. The app is currently free to download with no additional fees.
 
-## Installation
+Repository Front-End:
 
-1.  [Download](../../archive/master.zip) this template.
-1.  Move the .zip file to your `wdi/projects/` directory and Unzip it (creating a folder) -- **NOTE:** if the folder was already unzipped, use the `mv` command line to move it to the `wdi/projects/` directory.
-1.  Rename the directory from bucketlist-api -> your-app-name.
-1.  Empty [`README.md`](README.md) and fill with your own content.
-1.  Move into the new project and `git init`.
-1.  Replace all instances of `'bucketlist-api'` with your app name.
-1.  Install dependencies with `npm install`.
-1.  Ensure that you have `nodemon` installed by running `npm install -g nodemon`.
-1.  From the root of your repository, run the following commands. They will set a SECRET_KEY for development and testing.
- ```sh
- echo SECRET_KEY_BASE_TEST=$(openssl rand -base64 66 | tr -d '\n') >> .env
- echo SECRET_KEY_BASE_DEVELOPMENT=$(openssl rand -base64 66 | tr -d '\n') >> .env
- ```
-1.  Ensure the API is functioning properly by running `npm run server`.
-1.  Once everything is working, make an initial commit.
-1.  Follow the steps in [express-api-deployment-guide](https://git.generalassemb.ly/ga-wdi-boston/express-api-deployment-guide)
+https://github.com/Chair-Force-One/bucketlist-client
+
+Link to Front-End:
+
+https://chair-force-one.github.io/bucketlist-client/
+
+Repository Back-End:
+
+https://github.com/Chair-Force-One/bucketlist-api
+
+Link to Back-End:
+
+https://limitless-inlet-83543.herokuapp.com/
+
+## Instructions
+
+1. User should sign-up if not having an account yet.
+2. User should sign-in if they are already signed-up to use the app.
+3. The app allows a signed-in user to create adventures which act as resources to the bucket list.
+4. A User will only have one Bucket List.
+5. In order to add an adventure click the "Add item" button.
+6. Once signed the list auto-populates with adventures.
+7. After creating an adventure, the map shows the user which adventures they have (if Google's geocoder function in their API can correctly guess the targeted location).
+8. A user can sign-out or change password for authentication purposes.
+9. A user can edit, delete, or show an adventure which adjusts accordingly on the front and back end.
+
+## WireFrames
+
+[WireFrame-1](./public/IMG_2381.JPG)
+
+[WireFrame-2](./public/IMG_2382.JPG)
+
+[WireFrame-3](./public/IMG_2383.JPG)
+
+## ERD
+
+[ERD](./public/IMG_6002.JPG)
+
+## User Stories
+
+Authentication:
+
+As a user, I want to be able to sign in to view data from previous sessions
+As a user, i want to be able to create an account
+As a user, I want to be able to change my password
+As a user, I want to be able to sign out
+
+Bucket List:
+
+I want to store a list of things to do
+I want to attach a location to each list item
+I want to be able to check items of the list
+I want to be able to edit or delete items from the list (Different than checking them off)
+I want to be able to sort items by location or by status
+I want to be able to view locations on a map (NOT MVP!!!)
 
 ## Structure
 
-Dependencies are stored in [`package.json`](package.json).
+Authentication:
 
-The most important file for understanding the structure of the template is
-`server.js`. This is where the actual Express `app` object is created, where
-the middlewares and routes are registered, and more. To register a routefile,
-follow the pattern established here with `exampleRoutes` and `userRoutes`. If
-you want to add any middlewares to your app, do that here.
+| Request | Routes | Schema |
+|:-------:|:-------:|:------:|
+|  POST | /sign-up  | Requires=> email: String, password: String, password_confirmation: String |
+|  POST |  /sign-in | Requires=> email: String, password: String |
+|  PATCH |  /change-password | Requires=> old_password: String, new_password: String, token: String |
+|  DELETE |  /sign-out | Requires=> token: String |
 
-The `app` directory contains models and route files. Models are simply Mongoose
-models. To create your own, follow the patterns established in
-`app/models/example.js`. Route files are somewhat similar to controllers in
-Rails, but they cover more functionality, including serialization and deciding
-which HTTP verbs to accept and what to do with them.
+Adventures:
 
-The `config` directory holds just `db.js`, which is where you specify the name
-and URL of your database.
+| Request | Routes | Schema |
+|:-------:|:-------:|:------:|
+|  GET | /adventures  | Requires=> token: String |
+|  GET |  /adventures/:id | Requires=> token: String |
+|  POST |  /adventures | Requires=> priority: Number, title: String, place: String, notes: String, token: String |
+|  PATCH |  /adventures/:id | Requires=> priority: Number, title: String, place: String, notes: String, token: String |
+|  DELETE | /adventures/:id | Requires=> token: String |
 
-The `lib` directory is for code that will be used in other places in the
-application. The token authentication code is stored in `lib/auth.js`. The
-other files in `lib` deal with error handling. `custom_errors.js` is where all
-the different custom classes of errors are created. If you need some other kind
-of error message, you can add it here. There are also some functions defined
-here that are used elsewhere to check for errors. `lib/error_handler.js` is a
-function that will be used in all your `.catch`es. It catches errors, and sets
-the response status code based on what type of error got thrown.
+## Technologies Used
 
-You probably will only need to interact with files in `app/models`,
-`app/routes`, and `server.js`. You'll need to edit `db/config.js` just once,
-to change the name of your app.
+- HTML
 
-## Tasks
+- CSS
 
-Instead of `grunt`, this template uses `npm` as a task runner. This is more
-conventional for modern Express apps, and it's handy because we'll definitely
-use `npm` anyway. These are the commands available:
+- Mongo
 
-| Command                | Effect                                                                                                      |
-|------------------------|-------------------------------------------------------------------------------------------------------------|
-| `npm run server`       | Starts a development server with `nodemon` that automatically refreshes when you change something.                                                                                         |
-| `npm test`             | Runs automated tests.                                                                                       |
-| `npm run debug-server` | Starts the server in debug mode, which will print lots of extra info about what's happening inside the app. |
+- Mongoose
 
-## API
+- JScript (edited)
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
 
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API.
+## Planning
 
-### Authentication
+As Team Chair Force We:
 
-| Verb   | URI Pattern            | Controller#Action |
-|--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/` | `users#changepw`  |
-| DELETE | `/sign-out/`        | `users#signout`   |
+ - Created a team culture code.
+ - Reviewed Group Guidelines, Working in Groups, and Group Roles and abided by them.
+ - Created team scrum plan.
+ - Reviewed scrum daily.
+ - Created team git workflow and solved any merging conflicts together.
+ - Created User Stories.
+ - Created Wire Frames.
+ - Created ERD.
 
-#### POST /sign-up
+Here is our initial plan:
 
-Request:
+API:
+ - Download Express API Template
+ - Create a Github Repository
+ - Deploy to Heroku
+ - Create your resource and end points
+ - Test your resource's end points with curl scripts
+ - Add the relationship to a User
+ - Add User ownership to resource controller
 
-```sh
-curl --include --request POST http://localhost:4741/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
+Client:
+ - Download Browser Template
+ - Create a Github Repository
+ - Deploy to Github Pages
+ - Review api-token-auth
+ - Sign Up (curl then web app)
+ - Sign In (curl then web app)
+ - Change Password (curl then web app)
+ - Sign Out (curl then web page)
+ - All API calls have success or failure messages
+ - Review query-ajax-post
+ - Create resource (curl then web app)
+ - Get all of their owned resources (curl then web app)
+ - Delete single resource (curl then web app)
+ - Update single resource (curl then web app)
 
-```sh
-scripts/sign-up.sh
-```
+ Final Touches:
+ - README
+ - Troubleshoot/Debug
+ - Style
 
-Response:
+## Unsolved Issues
 
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
+- Clean up user interface.
+- Integrate social aspect.
+- Organize list based on completedness.
 
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
+## Additional Resources
 
-#### POST /sign-in
+[Google Maps API Documentation](https://cloud.google.com/maps-platform/)
+[Bootstrap Documentation](https://getbootstrap.com/)
 
-Request:
+## Google API Terms of Service
 
-```sh
-curl --include --request POST http://localhost:4741/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
-
-```sh
-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:4741/change-password/ \
-  --header "Authorization: Token token=$TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:4741/sign-out/ \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-## [License](LICENSE)
-
-1.  All content is licensed ...
+https://cloud.google.com/maps-platform/terms/
+- All licensing and acceptable use can be found in the above link.

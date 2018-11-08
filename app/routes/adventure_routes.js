@@ -33,7 +33,6 @@ const router = express.Router()
 router.get('/adventures', requireToken, (req, res) => {
   Adventure.find()
     .then(adventures => {
-      console.log(req.user.id)
       // const newAdventures = []
       const adventuresbyOwner = adventures.filter(adventure => {
         // console.log(adventure.owner)
@@ -44,7 +43,6 @@ router.get('/adventures', requireToken, (req, res) => {
           return true
         }
       })
-      console.log(adventuresbyOwner)
       // console.log(adventures)
       // adventures.filter(adventure => req.body.adventure.owner)
       // requireOwnership(req, adventures)
